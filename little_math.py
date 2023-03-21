@@ -82,9 +82,9 @@ def math_prob(level: int, op_symbol: str, op_func: callable):
     return score
 
 def main():
-    level = get_level()
+    #level = get_level()
     operator_symb, operator_func = get_operator()
-    score = math_prob(level, operator_symb, operator_func)
+    score = math_prob(get_level(), operator_symb, operator_func)
     print(f"Your score is {score}/5. Great Job!")
 
 if __name__ == "__main__":
