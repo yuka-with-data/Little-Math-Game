@@ -18,9 +18,11 @@ operator
 X
 Y
 
-mapping 
-key str user input ("+")
-value the name of function (add)
+decorators
+set X is grater than Y
+set decimal place, 2
+
+Error Handlings
 
  """
  # import libraries
