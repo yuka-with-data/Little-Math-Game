@@ -23,6 +23,7 @@ from operator import add, sub, mul, truediv
 class MathGame:
     def __init__(self, level=1):
         self.level = level
+        self.score = 0
         self.op_symbol = ""
         self.op_func = None
         """ 
@@ -30,16 +31,31 @@ class MathGame:
          because they are not known yet until the user provides valid input.
            """
 
+    def __str__(self):
+        return f"Your Final Score is {self.score} out of 5. Great Job!"
+    
     # handle errors - LEVEL
     @property
-    def level(self):
+    def level(self) -> int:
         return self._level
 
     @level.setter
-    def level(self, level):
-        if level not in (1,2,3):
+    def level(self, value: int):
+        if not isinstance(value, int):
+            raise TypeError
+        self._level = value
+
+    @property
+    def score(self) -> int:
+        return self.__score
+    
+    @score.setter
+    def score(self, value: int):
+        if not isinstance(value, int):
+            raise TypeError
+        if value < 0 or value > 5:
             raise ValueError
-        self._level = level
+        self.__score = value
 
     @staticmethod
     def get_level() -> int:
@@ -52,7 +68,7 @@ class MathGame:
             except ValueError as e:
                 print(e,"Invalid level. Try again.")
                 continue
-    
+
     @staticmethod
     def get_operator() -> tuple[str, callable]:
         operator_mapping = {
@@ -64,20 +80,24 @@ class MathGame:
         while True:
             operator = input("Operator: ")
             if operator in operator_mapping:
-                return operator, operator_mapping[operator]
+                op_func = operator_mapping[operator]
+                print(f"Debug: operator {operator} with function {op_func}")
+                return operator, op_func
             else:
                 print("Invalid operator. Try again.")
                 continue
     
     def generate_int(self) -> int:
         if self.level == 1:
-            return random.randrange(10**(self.level-1)-1,10**self.level)
+            """ 
+             When the level is 1, set the range between 1 and 10,
+             to prevent Zero Division Error from happening.
+               """
+            return random.randrange(10**(self.level-1),10**self.level)
         else:
             return random.randrange(10**(self.level-1),10**self.level)
 
-    def math_prob(self):
-        # score tracking    
-        score = 0
+    def math_prob(self) -> int:
         # get operator
         self.op_symbol, self.op_func = self.get_operator()
         # ask user 5 unique question
@@ -86,26 +106,32 @@ class MathGame:
             # Set X is always grater than Y
             if X < Y:
                 X, Y = Y, X
-            # user gets 3 chances to answer correctly
-            for _ in range(3):
+            # user gets 2 chances to answer correctly
+            for _ in range(2):
                 ans_input = input(f"{X} {self.op_symbol} {Y} = ")
-                if not ans_input.isdigit():
-                    print("Try Again.")
+                try:
+                    ans_float = round(float(ans_input), 1)
+                except ValueError:
+                    print("Input has to be in digit. Try Again.")
                     continue
-                if int(ans_input) == self.op_func(X,Y):
-                    score += 1
+
+                answer = round(float(self.op_func(X,Y)),1)
+
+                if ans_float == answer:
+                    self.score += 1
                     break
                 else:
                     print("wrong answer... Try again.")
             else:
-                print(f"The answer is {self.op_func(X,Y)}")
-        return score
+                print(f"The answer is {answer}")
+        return self.score
 
 # main function
 def main():
     level = MathGame.get_level()
     game = MathGame(level=level)
-    print(f'Final Score is {game.math_prob()}')
+    game.math_prob()
+    print(str(game))
 
 if __name__ == "__main__":
     main()
