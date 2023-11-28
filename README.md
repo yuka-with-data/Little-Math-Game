@@ -1,9 +1,7 @@
 # Little-Math-Game
 
 ## Objectives
-A simple math game program for users to practice Math calculations while having fun. 
-This program is to demonstrate my Python fundamental skills and knowledge.
-This is an ongoing project, and I will keep improving the script. 
+I have created a simple math game program for users to practice math calculations while having fun. This program is to demonstrate my Python fundamental skills and knowledge. This is an ongoing project, and I will keep improving the script.
 
 ## Python Fundamentals
 + Functions and Variables
